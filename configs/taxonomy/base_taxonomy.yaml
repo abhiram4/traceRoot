@@ -1,0 +1,101 @@
+# TraceRoot Error Taxonomy Specification
+# Extends the 12-category taxonomy from 'When Agents Fail to Act'
+
+taxonomy_name: "traceroot_v1"
+version: "1.0.0"
+
+families:
+  cognitive:
+    description: "Failures occurring in agent internal reasoning, task comprehension, or planning before/between tool actions."
+    categories:
+      - id: "misunderstood_task"
+        name: "Task Understanding Failure"
+        description: "Agent misinterprets user instructions, constraints, or expected output goals."
+        allowed_phases: ["task_understanding", "planning"]
+
+      - id: "invalid_plan"
+        name: "Invalid Plan / Subgoal Decomposition"
+        description: "Agent constructs an impossible, circular, unnecessary, or missing-subgoal execution plan."
+        allowed_phases: ["planning"]
+
+      - id: "reasoning_hallucination"
+        name: "Reasoning Hallucination / Inference Error"
+        description: "Agent makes unjustified deductive leaps or fabricates assumptions without tool backing."
+        allowed_phases: ["planning", "tool_result_interpretation", "final_synthesis"]
+
+  tool_interaction:
+    description: "Failures occurring during the tool selection, schema formulation, or API invocation boundary."
+    categories:
+      - id: "wrong_tool_selected"
+        name: "Inappropriate Tool Selection"
+        description: "Agent selects an irrelevant tool when a suitable tool was available, or fails to use tools."
+        allowed_phases: ["tool_selection"]
+
+      - id: "malformed_arguments"
+        name: "Malformed Arguments / Syntax Error"
+        description: "Agent generates unparseable JSON, invalid types, or syntactically invalid tool arguments."
+        allowed_phases: ["tool_invocation"]
+
+      - id: "invalid_api_usage"
+        name: "Invalid API Usage / Semantic Argument Error"
+        description: "Syntactically valid arguments that violate semantic API contracts or domain preconditions."
+        allowed_phases: ["tool_invocation"]
+
+      - id: "missing_required_parameter"
+        name: "Missing Required Parameter"
+        description: "Agent omits mandatory parameter fields required for tool execution."
+        allowed_phases: ["tool_invocation"]
+
+  environmental:
+    description: "Failures originating outside the agent reasoning boundary (tools, third-party APIs, sandbox state)."
+    categories:
+      - id: "tool_execution_error"
+        name: "Tool / Environment Runtime Error"
+        description: "Tool crashes, times out, throws HTTP 500, or sandbox environment is broken."
+        allowed_phases: ["tool_invocation"]
+
+      - id: "environment_state_inconsistency"
+        name: "State Inconsistency / Race Condition"
+        description: "External environment state diverges from expectation (e.g. database altered externally)."
+        allowed_phases: ["tool_invocation", "tool_result_interpretation"]
+
+      - id: "unexpected_observation"
+        name: "Unexpected Observation Format"
+        description: "Tool returns unstructured or schema-divergent content that breaks downstream handling."
+        allowed_phases: ["tool_result_interpretation"]
+
+  recovery:
+    description: "Failures occurring when the agent encounters an error or negative observation."
+    categories:
+      - id: "unhandled_tool_error"
+        name: "Unhandled Tool Error"
+        description: "Agent ignores an explicit tool error message and continues as if it succeeded."
+        allowed_phases: ["recovery_adaptation", "tool_result_interpretation"]
+
+      - id: "repetitive_failing_action"
+        name: "Repetitive Failing Action / Stuck in Loop"
+        description: "Agent retries an identical failing tool call repeatedly without adapting arguments or strategy."
+        allowed_phases: ["recovery_adaptation", "tool_invocation"]
+
+      - id: "premature_termination"
+        name: "Premature Termination"
+        description: "Agent gives up or concludes execution prematurely when recoverable actions were available."
+        allowed_phases: ["recovery_adaptation", "final_synthesis"]
+
+  synthesis:
+    description: "Failures occurring when synthesizing intermediate results into the final task response."
+    categories:
+      - id: "unsupported_conclusion"
+        name: "Unsupported Final Conclusion"
+        description: "Final answer makes claims not supported by or directly contradicting the collected tool results."
+        allowed_phases: ["final_synthesis"]
+
+      - id: "evidence_omission"
+        name: "Evidence Omission"
+        description: "Agent retrieved correct evidence during tool steps but failed to include it in final response."
+        allowed_phases: ["final_synthesis"]
+
+      - id: "constraint_violation"
+        name: "Output Constraint Violation"
+        description: "Final output violates explicit user format/length/structural constraints."
+        allowed_phases: ["final_synthesis"]

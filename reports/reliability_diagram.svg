@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
+  <rect width="500" height="400" fill="#1e1e2e" rx="8"/>
+  <text x="250" y="30" fill="#cdd6f4" font-family="sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Reliability Curve (ECE: 0.132)</text>
+  <line x1="50" y1="350" x2="450" y2="350" stroke="#6c7086" stroke-width="2"/>
+  <line x1="50" y1="50" x2="50" y2="350" stroke="#6c7086" stroke-width="2"/>
+  <line x1="50" y1="350" x2="450" y2="50" stroke="#a6adc8" stroke-dasharray="4,4" stroke-width="1.5"/>
+  <text x="250" y="385" fill="#a6adc8" font-family="sans-serif" font-size="12" text-anchor="middle">Mean Predicted Confidence</text>
+  <text x="15" y="200" fill="#a6adc8" font-family="sans-serif" font-size="12" text-anchor="middle" transform="rotate(-90 15 200)">Empirical Accuracy</text>
+  <circle cx="422" cy="110" r="5" fill="#89b4fa" stroke="#b4befe" stroke-width="1.5"/>
+</svg>

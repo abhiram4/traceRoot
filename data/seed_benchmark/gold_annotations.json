@@ -1,0 +1,370 @@
+{
+  "name": "traceroot_seed_gold",
+  "version": "1.0.0",
+  "records": [
+    {
+      "trajectory_id": "seed_01_success_order",
+      "annotator_id": "expert_annotator_1",
+      "task_success": true,
+      "first_error_step": null,
+      "root_cause_step": null,
+      "root_cause_phase": null,
+      "error_category": "no_error",
+      "propagated_errors": [],
+      "evidence_rationale": "Agent correctly called the get_order tool and synthesized accurate output.",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_02_invalid_plan",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 2,
+      "root_cause_step": 2,
+      "root_cause_phase": "planning",
+      "error_category": "invalid_plan",
+      "propagated_errors": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "evidence_rationale": "Step 2 formulated an invalid plan that omitted required security verification.",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_03_wrong_tool",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 3,
+      "root_cause_step": 3,
+      "root_cause_phase": "tool_selection",
+      "error_category": "wrong_tool_selected",
+      "propagated_errors": [
+        4,
+        5,
+        6
+      ],
+      "evidence_rationale": "Step 3 selected web_search instead of available python_calculator tool.",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_04_malformed_args",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 4,
+      "root_cause_step": 4,
+      "root_cause_phase": "tool_invocation",
+      "error_category": "malformed_arguments",
+      "propagated_errors": [
+        5,
+        6
+      ],
+      "evidence_rationale": "Step 4 generated unparseable invalid JSON arguments.",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_05_env_timeout",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 5,
+      "root_cause_step": 5,
+      "root_cause_phase": "tool_invocation",
+      "error_category": "tool_execution_error",
+      "propagated_errors": [
+        6
+      ],
+      "evidence_rationale": "Step 5 encountered an external 504 server timeout outside agent control.",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_06_unhandled_tool_error",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 6,
+      "root_cause_step": 6,
+      "root_cause_phase": "tool_result_interpretation",
+      "error_category": "unhandled_tool_error",
+      "propagated_errors": [],
+      "evidence_rationale": "Step 6 ignored explicit UserNotFound error and falsely claimed success.",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_07_unsupported_conclusion",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 6,
+      "root_cause_step": 6,
+      "root_cause_phase": "final_synthesis",
+      "error_category": "unsupported_conclusion",
+      "propagated_errors": [],
+      "evidence_rationale": "Tool reported $12.5M, but Step 6 synthesized $125M contradicting tool evidence.",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_08_misunderstood_task",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 6,
+      "root_cause_step": 6,
+      "root_cause_phase": "task_understanding",
+      "error_category": "misunderstood_task",
+      "propagated_errors": [],
+      "evidence_rationale": "Booked for July 10 instead",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_09_reasoning_hallucination",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 5,
+      "root_cause_step": 5,
+      "root_cause_phase": "tool_result_interpretation",
+      "error_category": "reasoning_hallucination",
+      "propagated_errors": [
+        6
+      ],
+      "evidence_rationale": "Assumed account suspended without evidence",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_10_invalid_api_usage",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 4,
+      "root_cause_step": 4,
+      "root_cause_phase": "tool_invocation",
+      "error_category": "invalid_api_usage",
+      "propagated_errors": [
+        5,
+        6
+      ],
+      "evidence_rationale": "Passed start_date later than end_date",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_11_missing_required_parameter",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 4,
+      "root_cause_step": 4,
+      "root_cause_phase": "tool_invocation",
+      "error_category": "missing_required_parameter",
+      "propagated_errors": [
+        5,
+        6
+      ],
+      "evidence_rationale": "Omitted mandatory recipient parameter",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_12_environment_state_inconsistency",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 4,
+      "root_cause_step": 4,
+      "root_cause_phase": "tool_invocation",
+      "error_category": "environment_state_inconsistency",
+      "propagated_errors": [
+        5,
+        6
+      ],
+      "evidence_rationale": "Seat was taken by concurrent buyer",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_13_unexpected_observation",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 5,
+      "root_cause_step": 5,
+      "root_cause_phase": "tool_result_interpretation",
+      "error_category": "unexpected_observation",
+      "propagated_errors": [
+        6
+      ],
+      "evidence_rationale": "Received raw HTML error stack",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_14_repetitive_failing_action",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 6,
+      "root_cause_step": 6,
+      "root_cause_phase": "recovery_adaptation",
+      "error_category": "repetitive_failing_action",
+      "propagated_errors": [],
+      "evidence_rationale": "Retried broken URL 4 times without modifying query",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_15_premature_termination",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 6,
+      "root_cause_step": 6,
+      "root_cause_phase": "recovery_adaptation",
+      "error_category": "premature_termination",
+      "propagated_errors": [],
+      "evidence_rationale": "Gave up after single hotel full",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_16_evidence_omission",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 6,
+      "root_cause_step": 6,
+      "root_cause_phase": "final_synthesis",
+      "error_category": "evidence_omission",
+      "propagated_errors": [],
+      "evidence_rationale": "Omitted hotel price despite tool returning it",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_17_constraint_violation",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 6,
+      "root_cause_step": 6,
+      "root_cause_phase": "final_synthesis",
+      "error_category": "constraint_violation",
+      "propagated_errors": [],
+      "evidence_rationale": "Output freeform text violating format constraint",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_18_no_error",
+      "annotator_id": "expert_annotator_1",
+      "task_success": true,
+      "first_error_step": null,
+      "root_cause_step": null,
+      "root_cause_phase": null,
+      "error_category": "no_error",
+      "propagated_errors": [],
+      "evidence_rationale": "Returned exact temperature correctly",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_19_no_error",
+      "annotator_id": "expert_annotator_1",
+      "task_success": true,
+      "first_error_step": null,
+      "root_cause_step": null,
+      "root_cause_phase": null,
+      "error_category": "no_error",
+      "propagated_errors": [],
+      "evidence_rationale": "Translated to Spanish correctly",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_20_no_error",
+      "annotator_id": "expert_annotator_1",
+      "task_success": true,
+      "first_error_step": null,
+      "root_cause_step": null,
+      "root_cause_phase": null,
+      "error_category": "no_error",
+      "propagated_errors": [],
+      "evidence_rationale": "Calculated 8.5% sales tax accurately",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_21_no_error",
+      "annotator_id": "expert_annotator_1",
+      "task_success": true,
+      "first_error_step": null,
+      "root_cause_step": null,
+      "root_cause_phase": null,
+      "error_category": "no_error",
+      "propagated_errors": [],
+      "evidence_rationale": "Found arXiv paper and summarized abstract",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_22_invalid_plan",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 3,
+      "root_cause_step": 3,
+      "root_cause_phase": "planning",
+      "error_category": "invalid_plan",
+      "propagated_errors": [
+        4,
+        5,
+        6
+      ],
+      "evidence_rationale": "Omitted test suite run before deployment",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_23_wrong_tool_selected",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 3,
+      "root_cause_step": 3,
+      "root_cause_phase": "tool_selection",
+      "error_category": "wrong_tool_selected",
+      "propagated_errors": [
+        4,
+        5,
+        6
+      ],
+      "evidence_rationale": "Called file_delete tool instead of linter",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_24_malformed_arguments",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 4,
+      "root_cause_step": 4,
+      "root_cause_phase": "tool_invocation",
+      "error_category": "malformed_arguments",
+      "propagated_errors": [
+        5,
+        6
+      ],
+      "evidence_rationale": "Passed string instead of int",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    },
+    {
+      "trajectory_id": "seed_25_unsupported_conclusion",
+      "annotator_id": "expert_annotator_1",
+      "task_success": false,
+      "first_error_step": 6,
+      "root_cause_step": 6,
+      "root_cause_phase": "final_synthesis",
+      "error_category": "unsupported_conclusion",
+      "propagated_errors": [],
+      "evidence_rationale": "Claimed $500 balance when tool reported $0",
+      "annotator_confidence": 1.0,
+      "metadata": {}
+    }
+  ],
+  "multi_annotator_records": []
+}

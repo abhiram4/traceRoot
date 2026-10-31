@@ -1,0 +1,12 @@
+# Single Fast Judge Configuration
+aggregation_strategy: "majority_vote"
+min_agreement_threshold: 0.5
+
+judges:
+  - name: "fast_judge"
+    judge_type: "llm"
+    provider: "gemini"
+    model: "gemini-2.5-flash"
+    temperature: 0.0
+    max_tokens: 1500
+    reliability_weight: 1.0

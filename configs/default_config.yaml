@@ -1,0 +1,43 @@
+# TraceRoot Default Configuration
+project_name: "TraceRoot"
+version: "0.1.0"
+log_level: "INFO"
+data_dir: "./data"
+
+ensemble:
+  aggregation_strategy: "confidence_weighted" # "majority_vote", "confidence_weighted", "reliability_weighted"
+  min_agreement_threshold: 0.6
+  enable_disagreement_analysis: true
+  judges:
+    - name: "judge_alpha"
+      judge_type: "mock" # Set to "llm" for live API
+      provider: "mock" # "gemini", "openai", "anthropic", "mock"
+      model: "mock-judge-v1"
+      temperature: 0.0
+      reliability_weight: 1.0
+    - name: "judge_beta"
+      judge_type: "mock"
+      provider: "mock"
+      model: "mock-judge-v1"
+      temperature: 0.1
+      reliability_weight: 0.95
+    - name: "judge_gamma"
+      judge_type: "mock"
+      provider: "mock"
+      model: "mock-judge-v1"
+      temperature: 0.2
+      reliability_weight: 0.90
+
+calibration:
+  method: "temperature_scaling"
+  n_bins: 10
+  bin_strategy: "uniform"
+  val_split_ratio: 0.3
+  random_seed: 42
+
+reporting:
+  default_format: "markdown"
+  include_propagation_graph: true
+  include_evidence: true
+  include_recommendations: true
+  output_dir: "./reports"

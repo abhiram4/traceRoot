@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TraceRoot Failure Report - {{ trajectory.trajectory_id }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad: true, theme: 'dark'});</script>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #cbd5e1;
+      --heading: #f8fafc;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --red: #f43f5e;
+      --red-glow: rgba(244, 63, 94, 0.2);
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.2);
+      --yellow: #f59e0b;
+      --yellow-glow: rgba(245, 158, 11, 0.2);
+      --purple: #a855f7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 2.5rem 1.5rem;
+      background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg) 75%);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+    .header-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    h1, h2, h3, h4 {
+      color: var(--heading);
+      font-weight: 600;
+      margin-top: 0;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .badge-error { background: var(--red-glow); color: var(--red); border: 1px solid var(--red); box-shadow: 0 0 12px var(--red-glow); }
+    .badge-success { background: var(--green-glow); color: var(--green); border: 1px solid var(--green); box-shadow: 0 0 12px var(--green-glow); }
+    .badge-root { background: var(--red-glow); color: #fda4af; border: 1px solid var(--red); }
+    .badge-prop { background: var(--yellow-glow); color: #fde68a; border: 1px solid var(--yellow); }
+    .badge-normal { background: var(--green-glow); color: #a7f3d0; border: 1px solid var(--green); }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .step-item {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .step-item:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .step-item.is-root {
+      border-left: 4px solid var(--red);
+      background: linear-gradient(90deg, rgba(244, 63, 94, 0.08) 0%, rgba(15, 23, 42, 0.6) 100%);
+    }
+    .step-item.is-prop {
+      border-left: 4px solid var(--yellow);
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.6) 100%);
+    }
+    .step-header {
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .step-body {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 0.92rem;
+    }
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0,0,0,0.4);
+      padding: 0.2rem 0.4rem;
+      border-radius: 6px;
+      font-size: 0.88em;
+      color: #e2e8f0;
+    }
+    pre {
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 8px;
+    }
+    .mermaid {
+      background: rgba(10, 15, 30, 0.9);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 style="font-size:1.8rem; margin-bottom:0.3rem;">TraceRoot Failure Attribution</h1>
+          <p style="margin:0; color:#94a3b8;">Trajectory: <code>{{ trajectory.trajectory_id }}</code></p>
+        </div>
+        <div>
+          {% if trajectory.task_success %}
+            <span class="badge badge-success">Task Success</span>
+          {% else %}
+            <span class="badge badge-error">Task Failed</span>
+          {% endif %}
+        </div>
+      </div>
+      <div style="margin-top:1.25rem; padding:1rem; background:rgba(0,0,0,0.25); border-radius:10px;">
+        <strong style="color:var(--accent);">Task Goal:</strong> {{ trajectory.task_prompt }}
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>📍 Root Cause Localization</h3>
+        {% if diagnosis.failure_detected and diagnosis.root_cause_step_id %}
+          <div style="display:flex; align-items:center; gap:0.5rem; margin:1rem 0;">
+            <span class="badge badge-root">Step {{ diagnosis.root_cause_step_id }}</span>
+            <span class="badge" style="background:rgba(168,85,247,0.2); color:#d8b4fe; border:1px solid var(--purple);">{{ diagnosis.root_cause_category.value }}</span>
+          </div>
+          <p><strong>Phase:</strong> <code>{{ diagnosis.root_cause_phase.value if diagnosis.root_cause_phase else "unknown" }}</code></p>
+          <p><strong>Diagnosis Confidence:</strong> <code>{{ "%.1f"|format(diagnosis.confidence * 100) }}%</code></p>
+          <p style="margin-top:1rem; color:#94a3b8; font-size:0.95rem; border-left:3px solid var(--accent); padding-left:0.75rem;">
+            {{ diagnosis.summary_rationale }}
+          </p>
+        {% else %}
+          <p style="color:var(--green);">✓ No failure detected. Trajectory executed cleanly.</p>
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <h3>🛠️ Causal Interventions</h3>
+        {% if recommendations %}
+          <p><strong>Target Layer:</strong> <code>{{ target_component }}</code></p>
+          <ul style="padding-left:1.2rem; color:#cbd5e1;">
+            {% for rec in recommendations %}
+              <li style="margin-bottom:0.5rem;">{{ rec }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p style="color:var(--green);">No remediation required.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if remediation %}
+    <div class="card" style="margin-bottom: 2rem; border-color: rgba(56, 189, 248, 0.4);">
+      <h3 style="color:var(--cyan);">✨ Automated Self-Healing Remediation Patches</h3>
+      <p style="color:#94a3b8; font-size:0.9rem;">Copy-pasteable code and prompt modifications generated specifically for this diagnosed failure:</p>
+
+      {% if remediation.prompt_diff %}
+      <div style="margin-top:1rem;">
+        <strong style="color:var(--heading);">1. System Prompt Patch (Git Diff):</strong>
+        <p style="color:#cbd5e1; font-size:0.85rem; margin:0.25rem 0 0.5rem 0;">{{ remediation.prompt_guidance }}</p>
+        <pre><code style="color:#38bdf8;">{{ remediation.prompt_diff }}</code></pre>
+      </div>
+      {% endif %}
+
+      {% if remediation.schema_code_patch %}
+      <div style="margin-top:1rem;">
+        <strong style="color:var(--heading);">2. Pydantic Tool Parameter Guardrail:</strong>
+        <p style="color:#cbd5e1; font-size:0.85rem; margin:0.25rem 0 0.5rem 0;">Drop-in parameter validator to reject invalid formulations before tool invocation:</p>
+        <pre><code style="color:#34d399;">{{ remediation.schema_code_patch }}</code></pre>
+      </div>
+      {% endif %}
+
+      {% if remediation.few_shot_exemplar %}
+      <div style="margin-top:1rem;">
+        <strong style="color:var(--heading);">3. In-Context Negative Constraint:</strong>
+        <pre><code style="color:#fbbf24;">{{ remediation.few_shot_exemplar }}</code></pre>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="card" style="margin-bottom: 2rem;">
+      <h3>⚡ Step-by-Step Causal Cascade ({{ steps_summary|length }} Steps)</h3>
+      <div style="margin-top:1rem;">
+        {% for step in steps_summary %}
+        <div class="step-item {% if step.relationship == 'Root Cause' %}is-root{% elif 'Propagated' in step.relationship %}is-prop{% endif %}">
+          <div class="step-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <strong style="color:var(--heading);">Step {{ step.step_id }}</strong>
+              <span style="color:#94a3b8; font-size:0.88rem;">{{ step.phase }}</span>
+            </div>
+            <div>
+              {% if step.relationship == 'Root Cause' %}
+                <span class="badge badge-root">ROOT CAUSE</span>
+              {% elif 'Propagated' in step.relationship %}
+                <span class="badge badge-prop">PROPAGATED</span>
+              {% else %}
+                <span class="badge badge-normal">VALID</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="step-body" style="display:{% if step.relationship == 'Root Cause' %}block{% else %}none{% endif %};">
+            <p style="margin:0 0 0.5rem 0;"><strong>Evidence / Trace:</strong></p>
+            <pre style="margin:0;">{{ step.evidence or "Step executed without explicit error." }}</pre>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if mermaid_chart %}
+    <div class="card">
+      <h3>📊 Directed Causal Propagation Graph</h3>
+      <div class="mermaid">
+{{ mermaid_chart }}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
+

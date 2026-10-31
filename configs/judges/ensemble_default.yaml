@@ -1,0 +1,29 @@
+# Multi-Judge Ensemble Configuration for Production
+aggregation_strategy: "reliability_weighted"
+min_agreement_threshold: 0.65
+enable_disagreement_analysis: true
+
+judges:
+  - name: "gemini_judge"
+    judge_type: "llm"
+    provider: "gemini"
+    model: "gemini-2.5-flash"
+    temperature: 0.0
+    max_tokens: 2048
+    reliability_weight: 1.0
+
+  - name: "openai_judge"
+    judge_type: "llm"
+    provider: "openai"
+    model: "gpt-4o"
+    temperature: 0.0
+    max_tokens: 2048
+    reliability_weight: 1.0
+
+  - name: "anthropic_judge"
+    judge_type: "llm"
+    provider: "anthropic"
+    model: "claude-3-5-sonnet-20241022"
+    temperature: 0.0
+    max_tokens: 2048
+    reliability_weight: 0.95

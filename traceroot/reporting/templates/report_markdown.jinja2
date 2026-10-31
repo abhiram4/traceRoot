@@ -1,0 +1,55 @@
+## TraceRoot Failure Report
+
+**Trajectory ID:** `{{ trajectory.trajectory_id }}`  
+**Task Outcome:** {% if trajectory.task_success %}✅ **Success**{% else %}❌ **Failed**{% endif %}  
+**Diagnosis Status:** {% if diagnosis.failure_detected %}⚠️ **Failure Detected**{% else %}✨ **No Failure Detected**{% endif %}
+
+---
+
+### Root Cause
+{% if diagnosis.failure_detected and diagnosis.root_cause_step_id %}
+- **Step:** `Step {{ diagnosis.root_cause_step_id }}`
+- **Execution Phase:** `{{ diagnosis.root_cause_phase.value if diagnosis.root_cause_phase else "unknown" }}`
+- **Error Category:** `{{ diagnosis.root_cause_category.value }}` ({{ category_name }})
+- **Confidence:** `{{ "%.2f"|format(diagnosis.confidence) }}`
+
+#### Evidence
+{{ diagnosis.summary_rationale }}
+{% else %}
+No failure detected. The trajectory executed in accordance with task requirements.
+{% endif %}
+
+---
+
+### Downstream Propagation
+| Step | Phase | Outcome | Relationship |
+| :--- | :--- | :--- | :--- |
+{% for step in steps_summary %}
+| `Step {{ step.step_id }}` | `{{ step.phase }}` | {% if step.is_error %}<span style="color:red">Incorrect</span>{% else %}<span style="color:green">Valid</span>{% endif %} | **{{ step.relationship }}** |
+{% endfor %}
+
+---
+
+### Recommended Engineering Action
+{% if recommendations %}
+**Target Component:**
+```text
+{{ target_component }}
+```
+
+**Potential Interventions:**
+{% for rec in recommendations %}
+- {{ rec }}
+{% endfor %}
+{% else %}
+No immediate architectural or prompt intervention required.
+{% endif %}
+
+{% if mermaid_chart %}
+---
+
+### Failure Propagation Graph
+```mermaid
+{{ mermaid_chart }}
+```
+{% endif %}
